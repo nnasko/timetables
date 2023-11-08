@@ -50,7 +50,7 @@ const Login = (props: Props) => {
         />
         <div className="flex items-center justify-center mt-2 gap-2">
           <Button type="submit" className="w-28">
-            Sign In
+            Submit
           </Button>
         </div>
       </form>
