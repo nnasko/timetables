@@ -30,18 +30,16 @@ const Login = (props: Props) => {
   };
   return (
     <div className={props.className}>
-      <div className="bg-gradient-to-b  from-slate-50 to-slate-200 p-2 text-center text-slate-600">
-        Login Form
-      </div>
+      <div className="min-h-screen flex bg-[#181818] items-center justify-center">
       {!!props.error && (
         <p className="bg-red-100 text-red-600 text-center p-2">
           Authentication Failed
         </p>
       )}
-      <form onSubmit={onSubmit} className="p-2 flex flex-col gap-3">
+      <form onSubmit={onSubmit} className="p-2 flex  bg-[#181818] rounded-lg border border-green-400 flex-col gap-3">
         <InputBox
           name="username"
-          labelText="User Name"
+          labelText="Username"
           onChange={(e) => (userName.current = e.target.value)}
         />
         <InputBox
@@ -54,14 +52,9 @@ const Login = (props: Props) => {
           <Button type="submit" className="w-28">
             Sign In
           </Button>
-          <Link
-            href={props.callbackUrl ?? "/"}
-            className="w-28 border border-red-600 text-center py-2 rounded-md text-red-600 transition hover:bg-red-600 hover:text-white hover:border-transparent active:scale-95"
-          >
-            Cancel
-          </Link>
         </div>
       </form>
+     </div>
     </div>
   );
 };
