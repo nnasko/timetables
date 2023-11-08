@@ -1,6 +1,7 @@
 import { login } from "@/lib/auth"
 import NextAuth from "next-auth/next"
 import CredentialsProvider from "next-auth/providers/credentials"
+import { PrismaClient } from '@prisma/client';
 
 const handler = NextAuth({
     providers: [
@@ -18,11 +19,17 @@ const handler = NextAuth({
   
         async authorize(credentials, req) {
           if (!credentials?.username || !credentials?.password) return null;
+          const prisma = new PrismaClient();
           try {
-            const user = await login(
-              credentials.username,
-              credentials.password
-            );
+          await prisma.$connect()
+
+          const user = await prisma.user.findFirst({
+            where: {
+              name: credentials.username,
+              password: credentials.password,
+            },
+          });
+    
             return user;
           } catch (e) {
             console.error(e);
