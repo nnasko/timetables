@@ -25,10 +25,13 @@ const handler = NextAuth({
           try {
             await prisma.$connect();
 
-            const user = await login(
-              credentials.username,
-              credentials.password
-            );
+            const user = await prisma.user.findFirst({
+              where: {
+                name: credentials.username,
+                password: credentials.password,
+              },
+            });
+  
             return user;
           } catch (e) {
             console.error(e);
