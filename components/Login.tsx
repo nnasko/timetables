@@ -36,7 +36,7 @@ const Login = (props: Props) => {
           Authentication Failed
         </p>
       )}
-      <form onSubmit={onSubmit} className="p-2 flex  bg-[#181818] rounded-lg border border-green-400 flex-col gap-3">
+      <form onSubmit={onSubmit} className="p-2 flex  bg-[#181818] rounded-lg border border-violet-400 flex-col gap-3">
         <InputBox
           name="username"
           labelText="Username"

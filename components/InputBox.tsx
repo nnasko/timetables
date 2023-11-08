@@ -9,7 +9,7 @@ const InputBox = ({ labelText, error, ...props }: Props) => {
   return (
     <div className={props.className}>
       <label
-        className={`block text-green-400 mb-2 text-xs lg:text-sm xl:text-base `}
+        className={`block text-[#ADB7BE] mb-2 text-xs lg:text-sm xl:text-base `}
       >
         {labelText}
       </label>

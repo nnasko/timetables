@@ -11,14 +11,14 @@ const LoginButton = () => {
     return (
       <div className="flex gap-4 ml-auto">
         <p className="text-sky-600">{session.user.name}</p>
-        <button onClick={() => signOut()} className="text-red-600">
-          Sign Out
+        <button onClick={() => signOut()} className="flex gap-4 ml-auto text-white lg:text-md text-sm bg-red-600 rounded lg:px-4 lg:py-2 px-2 py-1">
+          Logout
         </button>
       </div>
     );
   }
   return (
-    <Link href={"/login"} className="flex gap-4 ml-auto text-green-600">
+    <Link href={"/login"} className="flex gap-4 ml-auto text-white lg:text-md text-sm bg-violet-400 rounded lg:px-4 lg:py-2 px-2 py-1">
        Login
     </Link>
   );

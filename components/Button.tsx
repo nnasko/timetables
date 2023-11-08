@@ -20,7 +20,7 @@ const getVariant = (variant?: VariantType) => {
         return "bg-white text-violet-500 border border-violet-500 hover:text-white hover:bg-violet-700  ";
   
       default:
-        return "bg-green-400 hover:bg-green-600 text-white shadow shadow-violet-600/25 hover:shadow-violet-600/75";
+        return "bg-green-400 hover:bg-green-600 text-white shadow shadow-green-600/25 hover:shadow-green-600/75";
     }
   };
   

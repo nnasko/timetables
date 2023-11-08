@@ -11,7 +11,7 @@ const handler = NextAuth({
           username: {
             label: "Username",
             type: "text",
-            placeholder: "jsmith",
+            placeholder: "Username",
           },
           password: { label: "Password", type: "password" },
         },
