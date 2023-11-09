@@ -26,7 +26,7 @@ const ActivityForm = () => {
   return (
     <form onSubmit={handleFormSubmit} className='bg-[#292929] shadow-md  border-4 border-violet-400 rounded px-8 pt-6 pb-6'>
       <label className=''>
-        Activity Name
+        Title
         <input
           type="text"
           value={activityName}
@@ -36,7 +36,7 @@ const ActivityForm = () => {
       </label>
 
       <label>
-        Activity Start
+        Start
         <input
           type="time"
           value={startTime}
@@ -46,7 +46,7 @@ const ActivityForm = () => {
       </label>
 
       <label>
-        Activity End
+        End
         <input
           type="time"
           value={endTime}
