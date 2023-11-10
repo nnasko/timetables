@@ -25,7 +25,7 @@ const Login = (props: Props) => {
     });
 
     if (!res?.error) {
-      router.push(props.callbackUrl ?? "http://timetables-beta.vercel.app/dashboard");
+      router.push(props.callbackUrl ?? "https://timetables-beta.vercel.app/");
     }
   };
   return (
