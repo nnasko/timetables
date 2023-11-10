@@ -25,7 +25,7 @@ const Login = (props: Props) => {
     });
 
     if (!res?.error) {
-      router.push(props.callbackUrl ?? "http://localhost:3000");
+      router.push(props.callbackUrl ?? "http://timetables-beta.vercel.app/dashboard");
     }
   };
   return (

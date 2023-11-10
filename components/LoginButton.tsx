@@ -1,26 +1,73 @@
-"use client";
-import { signIn, signOut, useSession } from "next-auth/react";
-import Link from "next/link";
-import React from "react";
-import { Button } from "./Button";
+// LoginButton.tsx
+"use client"
+import Link from 'next/link';
+import { useSession, signIn, signOut } from 'next-auth/react';
+import { useState, useEffect } from 'react';
 
 const LoginButton = () => {
-  const { data: session } = useSession();
+  const { data: session, status } = useSession();
+  const [loading, setLoading] = useState(false);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
 
-  if (session && session.user) {
-    return (
-      <div className="flex gap-4 ml-auto">
-        <p className="text-transparent mt-2 border-b bg-clip-text bg-gradient-to-r from-violet-200 to-violet-600">{session.user.name}</p>
-        <button onClick={() => signOut()} className="flex gap-4 ml-auto text-white lg:text-md text-sm bg-red-600 rounded lg:px-4 lg:py-2 px-2 py-1">
+  useEffect(() => {
+    if (session) {
+      setIsAuthenticated(true);
+    } else {
+      setIsAuthenticated(false);
+    }
+  }, [session]);
+
+  const handleLogin = async () => {
+    setLoading(true);
+
+    try {
+      await signIn('your-auth-provider', { callbackUrl: '/' });
+    } catch (error) {
+      console.error('Login failed', error);
+    }
+
+    setLoading(false);
+  };
+
+  const handleLogout = async () => {
+    setLoading(true);
+
+    try {
+      await signOut({ callbackUrl: '/' });
+    } catch (error) {
+      console.error('Logout failed', error);
+    }
+
+    setLoading(false);
+  };
+
+  if (status === 'loading') {
+    return <p>Loading...</p>;
+  }
+
+  return (
+    <div className="flex gap-4 ml-auto">
+      {isAuthenticated && (
+        <p className="text-transparent mt-2 border-b bg-clip-text bg-gradient-to-r from-violet-200 to-violet-600">
+          {session?.user?.name || 'Guest'}
+        </p>
+      )}
+      {isAuthenticated ? (
+        <button
+          onClick={handleLogout}
+          className="flex gap-4 ml-auto text-white lg:text-md text-sm bg-red-600 rounded lg:px-4 lg:py-2 px-2 py-1"
+        >
           Logout
         </button>
-      </div>
-    );
-  }
-  return (
-    <Link href={"/login"} className="flex gap-4 ml-auto text-white lg:text-md text-sm bg-violet-400 rounded lg:px-4 lg:py-2 px-2 py-1">
-       Login
-    </Link>
+      ) : (
+        <button
+          onClick={handleLogin}
+          className="flex gap-4 ml-auto text-white lg:text-md text-sm bg-violet-400 rounded lg:px-4 lg:py-2 px-2 py-1"
+        >
+          Login
+        </button>
+      )}
+    </div>
   );
 };
 
