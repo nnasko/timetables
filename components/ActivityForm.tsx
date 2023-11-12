@@ -24,54 +24,77 @@ const ActivityForm = () => {
   };
 
   return (
-    <form onSubmit={handleFormSubmit} className='bg-[#292929] shadow-md  border-4 border-violet-400 rounded px-8 pt-6 pb-6'>
-      <label className=''>
-        Title
+    <form
+      onSubmit={handleFormSubmit}
+      className='bg-[#292929] shadow-md rounded px-8 pt-6 pb-8 mb-4'
+    >
+      <div className='mb-4'>
+        <label className='block text-[#ADB7BE] text-sm font-bold mb-2'>
+          Title
+        </label>
         <input
           type="text"
           value={activityName}
           onChange={(e) => setActivityName(e.target.value)}
-          className='block text-gray-700 rounded text-sm font-bold mb-4'
+          className='appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline'
         />
-      </label>
+      </div>
 
-      <label>
-        Start
+      <div className='mb-4'>
+        <label className='block text-[#ADB7BE] text-sm font-bold mb-2'>
+          Start
+        </label>
         <input
           type="time"
           value={startTime}
           onChange={(e) => setStartTime(e.target.value)}
-          className='block text-gray-700 rounded text-sm font-bold mb-4'
+          className='appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline'
         />
-      </label>
+      </div>
 
-      <label>
-        End
+      <div className='mb-4'>
+        <label className='block text-[#ADB7BE] text-sm font-bold mb-2'>
+          End
+        </label>
         <input
           type="time"
           value={endTime}
           onChange={(e) => setEndTime(e.target.value)}
-          className='block text-gray-700 rounded text-sm font-bold mb-4'
+          className='appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline'
         />
-      </label>
-      <label>
-        Description
+      </div>
+
+      <div className='mb-4'>
+        <label className='block text-[#ADB7BE] text-sm font-bold mb-2'>
+          Description
+        </label>
         <textarea
           value={description}
           onChange={(e) => setDescription(e.target.value)}
-          className='block text-gray-700 rounded text-sm'
+          className='appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline'
         />
-      </label>
-      <br />
+      </div>
 
-      <label className='mr-2 mb-4'>
-        User:
-        <input className='p-1 inline-block'
-        type="text" value={session?.user?.name || 'Unknown User'} disabled />
-      </label>
-      <br />
+      <div className='mb-4'>
+        <label className='block text-[#ADB7BE] text-sm font-bold mb-2'>
+          User
+        </label>
+        <input
+          className='appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline'
+          type="text"
+          value={session?.user?.name || 'Unknown User'}
+          disabled
+        />
+      </div>
 
-      <button type="submit" className='bg-green-400 hover:bg-green-600 text-white mt-4 font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline'>Submit</button>
+      <div className='flex items-center justify-between'>
+        <button
+          type="submit"
+          className='bg-green-400 hover:bg-green-600 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline'
+        >
+          Submit
+        </button>
+      </div>
     </form>
   );
 };
