@@ -17,22 +17,34 @@ const ActivityForm: React.FC<ActivityFormProps> = ({ onAddActivity }) => {
   const [activityName, setActivityName] = useState<string>('');
   const [startTime, setStartTime] = useState<string>('');
   const [endTime, setEndTime] = useState<string>('');
-  const [date, setDate] = useState<Date | string>('');
+  const [date, setDate] = useState<string>(''); 
   const [description, setDescription] = useState<string>('');
 
   const { data: session } = useSession();
 
   const handleFormSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-
+  
+    // Parse the date string to a Date object
+    const parsedDate = new Date(date);
+  
+    // Check if the parsedDate is a valid Date object
+    if (isNaN(parsedDate.getTime())) {
+      // Handle the case where the date is not valid
+      console.error('Invalid date');
+      return;
+    }
+  
+    // Create the newActivity object
     const newActivity: Activity = {
       id: Date.now(),
       title: activityName,
-      date: Date,
+      date: parsedDate, // Use the parsedDate
     };
-
+  
+    // Call the onAddActivity function
     onAddActivity(newActivity);
-
+  
     // Reset form fields
     setActivityName('');
     setStartTime('');
@@ -64,7 +76,7 @@ const ActivityForm: React.FC<ActivityFormProps> = ({ onAddActivity }) => {
         </label>
         <input
           type="date"
-          value={Date}
+          value={date}
           onChange={(e) => setDate(e.target.value)}
           className='appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline'
         />

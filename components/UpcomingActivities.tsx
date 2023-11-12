@@ -1,5 +1,3 @@
-// components/UpcomingActivities.tsx
-"use client"
 import React, { useState, useEffect } from 'react';
 
 // Define a type for your activity
@@ -9,44 +7,63 @@ interface Activity {
   date: Date;
 }
 
-const UpcomingActivities = () => {
-  const [activities, setActivities] = useState<Activity[]>([]); // Specify the type here
+interface UpcomingActivitiesProps {
+  activities: Activity[];
+}
+
+const UpcomingActivities: React.FC<UpcomingActivitiesProps> = ({ activities }) => {
   const [timeframe, setTimeframe] = useState('today'); // Default timeframe
 
   // Mock data for demonstration purposes; replace with actual data fetching logic
   const mockActivities: Activity[] = [
-    { id: 1, title: 'Meeting', date: new Date('2023-11-15T09:00:00') },
-    { id: 2, title: 'Project Deadline', date: new Date('2023-11-18T15:00:00') },
+    { id: 1, title: 'Meeting', date: new Date('2023-11-15T09:00') },
+    { id: 2, title: 'Project Deadline', date: new Date('2023-11-18T15:00') },
     // ... add more activities
   ];
 
+  const [filteredActivities, setFilteredActivities] = useState<Activity[]>([]);
+
   useEffect(() => {
     // Fetch activities from your data source (e.g., API)
-    // Update the 'activities' state with the fetched data
-    setActivities(mockActivities);
+    // Update the 'filteredActivities' state with the fetched data
+    // For now, I'm using the mockActivities as an example
+    setFilteredActivities(mockActivities);
   }, []); // Run this effect only once on component mount
 
   const filterActivities = (timeframe: string) => {
     const currentDate = new Date();
-
+  
     switch (timeframe) {
       case 'today':
-        return activities.filter((activity) => activity.date.toDateString() === currentDate.toDateString());
+        setFilteredActivities(
+          activities.filter((activity) =>
+            activity.date instanceof Date && activity.date.toDateString() === currentDate.toDateString()
+          )
+        );
+        break;
       case 'thisWeek':
         const endOfWeek = new Date(currentDate);
         endOfWeek.setDate(endOfWeek.getDate() + (6 - currentDate.getDay())); // Calculate end of the week
-        return activities.filter((activity) => activity.date >= currentDate && activity.date <= endOfWeek);
+        setFilteredActivities(
+          activities.filter(
+            (activity) =>
+              activity.date instanceof Date &&
+              activity.date >= currentDate &&
+              activity.date <= endOfWeek
+          )
+        );
+        break;
       // Add more cases for different timeframes as needed
       default:
-        return activities;
+        setFilteredActivities(activities);
+        break;
     }
   };
 
   const handleTimeframeChange = (newTimeframe: string) => {
     setTimeframe(newTimeframe);
+    filterActivities(newTimeframe);
   };
-
-  const sortedActivities = filterActivities(timeframe);
 
   return (
     <div>
@@ -67,7 +84,7 @@ const UpcomingActivities = () => {
       </div>
 
       {/* Display Activities Table */}
-      {sortedActivities.length > 0 ? (
+      {filteredActivities.length > 0 ? (
         <table className="min-w-full border border-gray-200">
           <thead>
             <tr>
@@ -76,7 +93,7 @@ const UpcomingActivities = () => {
             </tr>
           </thead>
           <tbody>
-            {sortedActivities.map((activity) => (
+            {filteredActivities.map((activity) => (
               <tr key={activity.id}>
                 <td className="border p-2">{activity.title}</td>
                 <td className="border p-2">{activity.date.toLocaleString()}</td>
