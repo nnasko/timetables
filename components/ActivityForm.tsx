@@ -1,16 +1,21 @@
 // components/ActivityForm.tsx
 import React, { useState } from 'react';
 import { useSession } from 'next-auth/react';
+import { PrismaClient } from '@prisma/client';
 
+const prisma = new PrismaClient();
 
 interface ActivityFormProps {
   onAddActivity: (newActivity: Activity) => void;
 }
 
 interface Activity {
-  id: number;
   title: string;
   date: Date;
+  startTime: string;
+  endTime: string;
+  description?: string;
+  userId: any;
 }
 
 const ActivityForm: React.FC<ActivityFormProps> = ({ onAddActivity }) => {
@@ -20,39 +25,77 @@ const ActivityForm: React.FC<ActivityFormProps> = ({ onAddActivity }) => {
   const [date, setDate] = useState<string>(''); 
   const [description, setDescription] = useState<string>('');
 
+  const getUserId = async (username: string) => {
+    try {
+      // Assuming you have a `User` model in your Prisma schema
+      const user = await prisma.user.findUnique({
+        where: {
+          name: username,
+        },
+        select: {
+          id: true, // Assuming `id` is the field you want to retrieve
+        },
+      });
+  
+      if (!user) {
+        throw new Error('User not found');
+      }
+  
+      return user.id;
+    } catch (error) {
+      console.error('Error obtaining userId:', error);
+      throw new Error('Error obtaining userId');
+    }
+  };
+  
   const { data: session } = useSession();
 
-  const handleFormSubmit = (e: React.FormEvent) => {
+  const handleFormSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
   
-    // Parse the date string to a Date object
     const parsedDate = new Date(date);
   
-    // Check if the parsedDate is a valid Date object
     if (isNaN(parsedDate.getTime())) {
-      // Handle the case where the date is not valid
       console.error('Invalid date');
       return;
     }
   
-    // Create the newActivity object
     const newActivity: Activity = {
-      id: Date.now(),
       title: activityName,
-      date: parsedDate, // Use the parsedDate
+      date: parsedDate,
+      startTime,
+      endTime,
+      description,
+      userId: getUserId,
     };
   
-    // Call the onAddActivity function
-    onAddActivity(newActivity);
+    try {
+      const response = await fetch('/api/submit-activity', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(newActivity),
+      });
   
-    // Reset form fields
-    setActivityName('');
-    setStartTime('');
-    setEndTime('');
-    setDescription('');
-    setDate('');
+      if (response.ok) {
+        // Handle success, reset form fields, etc.
+        console.log('Activity submitted successfully');
+        setActivityName('');
+        setStartTime('');
+        setEndTime('');
+        setDescription('');
+        setDate('');
+      } else {
+        // Handle error
+        console.error('Error submitting activity:', response.statusText);
+      }
+    } catch (error) {
+      console.error('Error submitting activity:', error);
+    }
   };
-
+  
+  
   return (
     <form
       onSubmit={handleFormSubmit}

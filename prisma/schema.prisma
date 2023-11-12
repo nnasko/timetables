@@ -16,4 +16,16 @@ model User {npx prisma migrate save --name init
   email    String @unique
   name     String
   password String
+  activities Activity[]
+}
+
+model Activity {
+  id          Int       @id @default(autoincrement())
+  title       String
+  date        DateTime
+  startTime   String?   // Assuming the time format is a string for simplicity
+  endTime     String?   // Assuming the time format is a string for simplicity
+  description String?
+  userId      Int       // Assuming a foreign key relationship with User
+  user        User      @relation(fields: [userId], references: [id])
 }
