@@ -1,32 +1,50 @@
-// components/ActivityForm.js
-"use client"
+// components/ActivityForm.tsx
 import React, { useState } from 'react';
 import { useSession } from 'next-auth/react';
 
-const ActivityForm = () => {
-  const [activityName, setActivityName] = useState('');
-  const [startTime, setStartTime] = useState('');
-  const [endTime, setEndTime] = useState('');
-  const [description, setDescription] = useState('');
+
+interface ActivityFormProps {
+  onAddActivity: (newActivity: Activity) => void;
+}
+
+interface Activity {
+  id: number;
+  title: string;
+  date: Date;
+}
+
+const ActivityForm: React.FC<ActivityFormProps> = ({ onAddActivity }) => {
+  const [activityName, setActivityName] = useState<string>('');
+  const [startTime, setStartTime] = useState<string>('');
+  const [endTime, setEndTime] = useState<string>('');
+  const [date, setDate] = useState<Date | string>('');
+  const [description, setDescription] = useState<string>('');
 
   const { data: session } = useSession();
 
-  const handleFormSubmit = (e: { preventDefault: () => void; }) => {
+  const handleFormSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    // Your form submission logic goes here
-    console.log({
-      activityName,
-      startTime,
-      endTime,
-      description,
-      userName: session?.user?.name || 'Unknown User',
-    });
+
+    const newActivity: Activity = {
+      id: Date.now(),
+      title: activityName,
+      date: Date,
+    };
+
+    onAddActivity(newActivity);
+
+    // Reset form fields
+    setActivityName('');
+    setStartTime('');
+    setEndTime('');
+    setDescription('');
+    setDate('');
   };
 
   return (
     <form
       onSubmit={handleFormSubmit}
-      className='bg-[#292929] shadow-md rounded px-8 pt-6 pb-8 mb-4'
+      className='bg-[#181818] shadow-md rounded px-8 pt-6 pb-8 mb-4'
     >
       <div className='mb-4'>
         <label className='block text-[#ADB7BE] text-sm font-bold mb-2'>
@@ -36,6 +54,18 @@ const ActivityForm = () => {
           type="text"
           value={activityName}
           onChange={(e) => setActivityName(e.target.value)}
+          className='appearance-none border rounded w-full py-2 px-3 text-[#ADB7BE] leading-tight focus:outline-none focus:shadow-outline'
+        />
+      </div>
+
+      <div className='mb-4'>
+        <label className='block text-[#ADB7BE] text-sm font-bold mb-2'>
+          Date
+        </label>
+        <input
+          type="date"
+          value={Date}
+          onChange={(e) => setDate(e.target.value)}
           className='appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline'
         />
       </div>
@@ -80,7 +110,7 @@ const ActivityForm = () => {
           User
         </label>
         <input
-          className='appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline'
+          className='appearance-none border rounded w-full py-2 px-3 text- leading-tight focus:outline-none focus:shadow-outline'
           type="text"
           value={session?.user?.name || 'Unknown User'}
           disabled
