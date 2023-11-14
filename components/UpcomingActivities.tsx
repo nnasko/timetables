@@ -2,9 +2,12 @@ import React, { useState, useEffect } from 'react';
 
 // Define a type for your activity
 interface Activity {
-  id: number;
   title: string;
   date: Date;
+  startTime: string;
+  endTime: string;
+  description?: string;
+  id: number; // Change `any` to `number` assuming userId is of type `number` in the database
 }
 
 interface UpcomingActivitiesProps {
@@ -14,12 +17,6 @@ interface UpcomingActivitiesProps {
 const UpcomingActivities: React.FC<UpcomingActivitiesProps> = ({ activities }) => {
   const [timeframe, setTimeframe] = useState('today'); // Default timeframe
 
-  // Mock data for demonstration purposes; replace with actual data fetching logic
-  const mockActivities: Activity[] = [
-    { id: 1, title: 'Meeting', date: new Date('2023-11-15T09:00') },
-    { id: 2, title: 'Project Deadline', date: new Date('2023-11-18T15:00') },
-    // ... add more activities
-  ];
 
   const [filteredActivities, setFilteredActivities] = useState<Activity[]>([]);
 
@@ -27,8 +24,8 @@ const UpcomingActivities: React.FC<UpcomingActivitiesProps> = ({ activities }) =
     // Fetch activities from your data source (e.g., API)
     // Update the 'filteredActivities' state with the fetched data
     // For now, I'm using the mockActivities as an example
-    setFilteredActivities(mockActivities);
-  }, []); // Run this effect only once on component mount
+    setFilteredActivities(filteredActivities);
+  }, [filteredActivities]); // Run this effect only once on component mount
 
   const filterActivities = (timeframe: string) => {
     const currentDate = new Date();

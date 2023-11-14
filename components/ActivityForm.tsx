@@ -15,7 +15,7 @@ interface Activity {
   startTime: string;
   endTime: string;
   description?: string;
-  userId: any;
+  userId: number;
 }
 
 const ActivityForm: React.FC<ActivityFormProps> = ({ onAddActivity }) => {
@@ -27,13 +27,14 @@ const ActivityForm: React.FC<ActivityFormProps> = ({ onAddActivity }) => {
 
   const getUserId = async (username: string) => {
     try {
-      // Assuming you have a `User` model in your Prisma schema
-      const user = await prisma.user.findUnique({
+      console.log('Searching for user with username:', username);
+      
+      const user = await prisma.user.findFirst({
         where: {
           name: username,
         },
         select: {
-          id: true, // Assuming `id` is the field you want to retrieve
+          id: true,
         },
       });
   
@@ -52,24 +53,31 @@ const ActivityForm: React.FC<ActivityFormProps> = ({ onAddActivity }) => {
 
   const handleFormSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-  
+
     const parsedDate = new Date(date);
-  
+
     if (isNaN(parsedDate.getTime())) {
       console.error('Invalid date');
       return;
     }
-  
-    const newActivity: Activity = {
-      title: activityName,
-      date: parsedDate,
-      startTime,
-      endTime,
-      description,
-      userId: getUserId,
-    };
-  
+
+    if (!session?.user?.name) {
+      console.error('User not authenticated');
+      return;
+    }
+
     try {
+      const userId = await getUserId(session.user.name);
+
+      const newActivity: Activity = {
+        title: activityName,
+        date: parsedDate,
+        startTime,
+        endTime,
+        description,
+        userId: userId, // Assign the obtained userId
+      };
+
       const response = await fetch('/api/submit-activity', {
         method: 'POST',
         headers: {
@@ -77,9 +85,9 @@ const ActivityForm: React.FC<ActivityFormProps> = ({ onAddActivity }) => {
         },
         body: JSON.stringify(newActivity),
       });
-  
+
       if (response.ok) {
-        // Handle success, reset form fields, etc.
+        // Handle success
         console.log('Activity submitted successfully');
         setActivityName('');
         setStartTime('');

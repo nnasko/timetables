@@ -16,7 +16,7 @@ model User {npx prisma migrate save --name init
   email    String @unique
   name     String
   password String
-  activities Activity[]
+  activities Activity[] 
 }
 
 model Activity {
