@@ -1,6 +1,7 @@
 import React from 'react'
 import LoginButton from './LoginButton'
 import Link from 'next/link'
+import { NextUIProvider } from '@nextui-org/system'
 
 const Navbar = () => {
   return (

@@ -3,6 +3,7 @@
 import Link from 'next/link';
 import { useSession, signIn, signOut } from 'next-auth/react';
 import { useState, useEffect } from 'react';
+import { Skeleton } from '@nextui-org/react';
 
 const LoginButton = () => {
   const { data: session, status } = useSession();
@@ -48,7 +49,9 @@ const LoginButton = () => {
   };
 
   if (status === 'loading') {
-    return <p>Loading...</p>;
+    return (
+      <div></div>
+    )
   }
 
   return (
